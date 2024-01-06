@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Connect to SQLite database
-const db = new sqlite3.Database('sqlite3-learn-web', (err) => {
+const db = new sqlite3.Database(':memory:', (err) => {
     if (err) {
         return console.error(err.message);
     }
@@ -10,10 +10,18 @@ const db = new sqlite3.Database('sqlite3-learn-web', (err) => {
 
 // Create employees table
 db.serialize(() => {
-    db.run(`CREATE TABLE employees (
+    db.run(`CREATE TABLE IF NOT EXISTS employees (
         employee_id INTEGER PRIMARY KEY,
         name TEXT,
         department TEXT
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL,
+        password TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone TEXT NOT NULL
     )`);
 
     // Insert sample data
